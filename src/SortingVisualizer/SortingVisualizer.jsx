@@ -1,28 +1,44 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { getBubbleSortAnimation } from '../Algorithms/BubbleSort'
 
-
 const SortingVisualizer = () => {
-    const [arraySize, setArraySize] = useState(20);
+    const [arraySize, setArraySize] = useState(40);
     const [animationSpeed, setAnimationSpeed] = useState(60);
     const [sortingArray, setSortingArray] = useState([]);
+    const [disableButtons, setDisableButtons] = useState(false)
+    const [setsortingAlgoInd, setSortingAlgoInd] = useState(0)
+    const ref = useRef(null)
+
+    const duplicateArray = sortingArray.slice();
+    const sortingAlogoritms = ["Select The Sorting Algorithm👆","Bubble Sort", "Quick Sort", "Selection Sort", "Heap Sort", "Insertion Sort"]
 
     useEffect(() => {
       const newArray = [];
       for (let i = 0; i < arraySize; i++) {
-        newArray.push(generateRandomElement(10, 300))
+        newArray.push(generateRandomElement(40, 400))
         
       }
       setSortingArray(newArray);
     }, [arraySize])
-    
+
+    const barWidth = arraySize > 50 ? 12 : arraySize > 25 ? 17 : 24;    
 
     const generateRandomElement = (max, min) => {
         return Math.floor(Math.random() * (max - min + 1) + min)
     }
 
+    const resetArray = () => {
+        setSortingAlgoInd(0)
+        const newArray = [];
+        for (let i = 0; i < arraySize; i++) {
+            newArray.push(generateRandomElement(40, 400));
+        }
+        setSortingArray(newArray);
+    };
+
 
     const sortingAnimation = (animationArray) => {
+        setDisableButtons(true);
         const arrayBars = document.getElementsByClassName('arrayBar');
         for (let i = 0; i < animationArray.length; i++) {
             // The color of elements will change if ther are swaping their places;
@@ -50,74 +66,113 @@ const SortingVisualizer = () => {
                 }, i * (101 - animationSpeed));
             }
         }
+        setTimeout(() => {
+            setDisableButtons(false);
+          }, animationArray.length * (101 - animationSpeed));
+        
     }
 
     const bubbleSort = () => {
-        // const animationArray = getBubbleSortAnimation(sortingArray, arraySize)
-        const animationArray = getBubbleSortAnimation(sortingArray, arraySize);
+        setSortingAlgoInd(1)
+        window.scrollTo(0, 200) 
+        ref.current?.scrollIntoView({ behavior: "smooth" });
+        const animationArray = getBubbleSortAnimation(duplicateArray, arraySize);
+        sortingAnimation(animationArray);   
+    } 
+
+    const quickSort = () => {
+        setSortingAlgoInd(2)
+        ref.current?.scrollIntoView({ behavior: "smooth" });
+        const animationArray = getBubbleSortAnimation(duplicateArray, arraySize);
+        sortingAnimation(animationArray);    
+    }
+    const selectionSort = () => {
+        setSortingAlgoInd(3)
+        ref.current?.scrollIntoView({ behavior: "smooth" });
+        const animationArray = getBubbleSortAnimation(duplicateArray, arraySize);
+        sortingAnimation(animationArray);    
+    }
+    const heapSort = () => {
+        setSortingAlgoInd(4)
+        ref.current?.scrollIntoView({ behavior: "smooth" });
+        const animationArray = getBubbleSortAnimation(duplicateArray, arraySize);
+        sortingAnimation(animationArray);    
+    }
+    const InsertionSort = () => {
+        setSortingAlgoInd(5)
+        ref.current?.scrollIntoView({ behavior: "smooth" });
+        const animationArray = getBubbleSortAnimation(duplicateArray, arraySize);
         sortingAnimation(animationArray);    
     }
 
     return (
         <div className="sorting">
     
+            <div className="main-heading">Sorting Visualizer</div>
             <div className="navbar">
                 <div className="range-container">
                     <div className="size">
                         <label htmlFor="size-slider">Size of Array</label>
                         <input 
                             type="range" 
-                            name="size-slider" 
+                            className="slider"
                             id="size-slider" 
                             value={arraySize} 
-                            maxLength={100} 
-                            minLength={10} 
-                            onChange={(e) => { setArraySize(e.target.value) }}    
+                            min={10} 
+                            max={80} 
+                            onChange={(e) => { setArraySize(e.target.value) }} 
+                            disabled={disableButtons}   
                         />
                     </div>
                     <div className="speed">
-                    <label htmlFor="speed-slider">Size of Array</label>
+                    <label htmlFor="speed-slider">Sorting Speed</label>
                         <input 
-                            type="range" 
-                            name="speed-slider" 
+                            type="range"                               
+                            className="slider"
                             id="speed-slider" 
                             value={animationSpeed} 
-                            maxLength={100} 
-                            minLength={10} 
-                            onChange={(e) => { setAnimationSpeed(e.target.value) }}    
+                            min={1} 
+                            max={100} 
+                            onChange={(e) => { setAnimationSpeed(e.target.value) }} 
+                            disabled = {disableButtons}   
                         />
                     </div>
                 </div>
                 <div className="buttons">
-                    <button >Generate New Array</button>
+                    <button className="generate" onClick={resetArray} disabled={disableButtons} >Generate New Array</button>
 
-                    <button>Quick Sort</button>
-                    <button onClick={ bubbleSort }>Bubble Sort</button>
-                    <button>Selection Sort</button>
-                    <button>Heap Sort</button>
-                    <button>Insertion Sort</button>
+                    <button disabled={disableButtons} onClick={ bubbleSort }>Bubble Sort</button>
+                    <button disabled={disableButtons} onClick={ quickSort }>Quick Sort</button>
+                    <button disabled={disableButtons} onClick={ selectionSort }>Selection Sort</button>
+                    <button disabled={disableButtons} onClick={ heapSort }>Heap Sort</button>
+                    <button disabled={disableButtons} onClick={ InsertionSort }>Insertion Sort</button>
                 </div>
             </div>
 
 
             <div className="main">
-                {
-                    sortingArray.map((element, ind) => {
-                        return (
-                            <div 
-                                className="arrayBar"
-                                key={ind}
-                                style={{
-                                    height: `${element}px`,
-                                    width: `20px`,
-                                }}
-                            >
-                            </div>
-                        )
-                    })
-                }
+                <h1 className="heading">{sortingAlogoritms[setsortingAlgoInd]}</h1>
+                <div className="sorting-container" ref={ref}>
+                    {
+                        sortingArray.map((element, ind) => {
+                            return (
+                                <div 
+                                    className="arrayBar"
+                                    key={ind}
+                                    style={{
+                                        height: `${element}px`,
+                                        width: `${barWidth}px`,
+                                    }}
+                                >
+                                </div>
+                            )
+                        })
+                    }
+                </div>
             </div>
+
         </div>
+        
     );
 }
 

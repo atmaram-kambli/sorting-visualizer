@@ -9,13 +9,18 @@ export const getBubbleSortAnimation = (array, arraySize) => {
 
 const BubbleSort = (array, size, animationArray) => {
     for (let i = 0; i < size - 1; i++) {
+        let swapped = false;
         for (let j = 0; j < size - i - 1; j++) {
             if(array[j] > array[j+1]) {
                 animationArray.push([j, j + 1]);
                 swap(array, j , j + 1);
                 animationArray.push([j, array[j], j + 1, array[j+1]]);
                 animationArray.push([j, j + 1]);
+                swapped = true;
             }
         }        
+        if(swapped === false) {
+            break;
+        }
     }
 }
