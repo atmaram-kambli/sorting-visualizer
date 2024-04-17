@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import { getBubbleSortAnimation } from '../Algorithms/BubbleSort';
 import { getSelectionSortAnimation } from '../Algorithms/SelectionSort'
 import { getQuickSortAnimation } from '../Algorithms/QuickSort'
+import { getInsertionSortAnimations } from '../Algorithms/InsertionSort'
+import { getHeapSortAnimations } from '../Algorithms/HeapSort'
 
 const SortingVisualizer = () => {
     const [arraySize, setArraySize] = useState(40);
@@ -97,14 +99,37 @@ const SortingVisualizer = () => {
     const heapSort = () => {
         setSortingAlgoInd(4)
         ref.current?.scrollIntoView({ behavior: "smooth" });
-        const animationArray = getBubbleSortAnimation(duplicateArray, arraySize);
+        const animationArray = getHeapSortAnimations(duplicateArray, arraySize);
         sortingAnimation(animationArray);    
     }
     const InsertionSort = () => {
         setSortingAlgoInd(5)
-        ref.current?.scrollIntoView({ behavior: "smooth" });
-        const animationArray = getBubbleSortAnimation(duplicateArray, arraySize);
-        sortingAnimation(animationArray);    
+        setDisableButtons(true);
+        // ref.current?.scrollIntoView({ behavior: "smooth" });
+        const animations = getInsertionSortAnimations(duplicateArray, arraySize);
+        const arrayBars = document.getElementsByClassName("arrayBar");
+        for (let i = 0; i < animations.length; i++) {
+        const isColorChange = i % 3 !== 1;
+        if (isColorChange) {
+            const [barOneIdx, barTwoIdx] = animations[i];
+            const barOneStyle = arrayBars[barOneIdx].style;
+            const barTwoStyle = arrayBars[barTwoIdx].style;
+            const color = i % 3 === 0 ? "turquoise" : "#a66cff";
+            setTimeout(() => {
+            barOneStyle.backgroundColor = color;
+            barTwoStyle.backgroundColor = color;
+            }, i * (101 - animationSpeed));
+        } else {
+            setTimeout(() => {
+            const [barIdx, newHeight] = animations[i];
+            const barStyle = arrayBars[barIdx].style;
+            barStyle.height = `${newHeight}px`;
+            }, i * (101 - animationSpeed));
+        }
+        }
+        setTimeout(() => {
+            setDisableButtons(false);
+        }, animations.length * (101 - animationSpeed));  
     }
 
     return (
