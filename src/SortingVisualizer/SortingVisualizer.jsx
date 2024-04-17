@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { getBubbleSortAnimation } from '../Algorithms/BubbleSort';
 import { getSelectionSortAnimation } from '../Algorithms/SelectionSort'
+import { getQuickSortAnimation } from '../Algorithms/QuickSort'
 
 const SortingVisualizer = () => {
     const [arraySize, setArraySize] = useState(40);
@@ -84,7 +85,7 @@ const SortingVisualizer = () => {
     const quickSort = () => {
         setSortingAlgoInd(2)
         ref.current?.scrollIntoView({ behavior: "smooth" });
-        const animationArray = getBubbleSortAnimation(duplicateArray, arraySize);        
+        const animationArray = getQuickSortAnimation(duplicateArray, arraySize);        
         sortingAnimation(animationArray);    
     }
     const selectionSort = () => {
