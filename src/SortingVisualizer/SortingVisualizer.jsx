@@ -9,9 +9,9 @@ const SortingVisualizer = () => {
     const [arraySize, setArraySize] = useState(40);
     const [animationSpeed, setAnimationSpeed] = useState(60);
     const [sortingArray, setSortingArray] = useState([]);
-    const [disableButtons, setDisableButtons] = useState(false)
-    const [setsortingAlgoInd, setSortingAlgoInd] = useState(0)
-    const ref = useRef(null)
+    const [disableButtons, setDisableButtons] = useState(false);
+    const [setsortingAlgoInd, setSortingAlgoInd] = useState(0);
+    const ref = useRef(null);
 
     const duplicateArray = sortingArray.slice();
     const sortingAlogoritms = ["Select The Sorting Algorithm👆","Bubble Sort", "Quick Sort", "Selection Sort", "Heap Sort", "Insertion Sort"]
@@ -25,7 +25,7 @@ const SortingVisualizer = () => {
       setSortingArray(newArray);
     }, [arraySize])
 
-    const barWidth = arraySize > 50 ? 12 : arraySize > 25 ? 17 : 24;    
+    // const barWidth = arraySize > 50 ? 12 : arraySize > 25 ? 5 : 24;    
 
     const generateRandomElement = (max, min) => {
         return Math.floor(Math.random() * (max - min + 1) + min)
@@ -45,8 +45,7 @@ const SortingVisualizer = () => {
         setDisableButtons(true);
         const arrayBars = document.getElementsByClassName('arrayBar');
         for (let i = 0; i < animationArray.length; i++) {
-            // The color of elements will change if ther are swaping their places;
-            const isChangeColor = (i % 3 !== 1);
+            const isChangeColor = (i % 3 !== 1); 
 
             if(isChangeColor === true) {
                 const [barOneInd, barTwoInd] = animationArray[i];
@@ -132,6 +131,15 @@ const SortingVisualizer = () => {
         }, animations.length * (101 - animationSpeed));  
     }
 
+    const getArrayBarWidth = () => {
+        if (ref.current) {
+          const containerWidth = ref.current.clientWidth;
+          const barWidth = Math.max(3, Math.floor(containerWidth / arraySize) - 2);
+          return barWidth;
+        }
+        return 10;
+      };
+
     return (
         <div className="sorting">
     
@@ -188,7 +196,7 @@ const SortingVisualizer = () => {
                                     key={ind}
                                     style={{
                                         height: `${element}px`,
-                                        width: `${barWidth}px`,
+                                        width: `${getArrayBarWidth()}px`,
                                     }}
                                 >
                                 </div>

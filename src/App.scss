@@ -180,11 +180,28 @@
       font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     }
 
+    // .sorting-container {
+    //   display: flex;
+    //   flex-direction: row;
+    //   gap: 2px;
+    //   // align-items: baseline;
+    //   align-items: flex-end;
+    //   justify-content: center;
+    //   height: 450px;
+    //   padding: 20px;
+    //   padding-bottom: 40px;
+    //   border-radius: 10px;
+    
+    //   .arrayBar {
+    //     background-color: var(--primary);
+    //     border-radius: 5px;
+    //   }
+    // }
     .sorting-container {
       display: flex;
+      width: 80%;
       flex-direction: row;
       gap: 2px;
-      // align-items: baseline;
       align-items: flex-end;
       justify-content: center;
       height: 450px;
@@ -195,6 +212,14 @@
       .arrayBar {
         background-color: var(--primary);
         border-radius: 5px;
+        width: 12px;
+      }
+    }
+    
+    @media screen and (max-width: 992px) {
+      .sorting-container {
+        width: 90%;
+        gap: 1px;
       }
     }
   }
